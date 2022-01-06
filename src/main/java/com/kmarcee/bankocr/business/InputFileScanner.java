@@ -1,5 +1,6 @@
 package com.kmarcee.bankocr.business;
 
+import com.kmarcee.bankocr.business.exception.parsing.FileReadingException;
 import com.kmarcee.bankocr.config.ApplicationSettings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -32,21 +33,22 @@ public class InputFileScanner implements FileScanner {
     }
 
     @Override
-    public String read() throws IOException {
+    public String read() {
         if (isBlank(applicationSettings.getInputSource().getFilePath())) {
             log.warn("Cannot scan unspecified input file.");
             return null;
         }
 
-        log.debug(
-                "Scanning input file {}",
-                new File(applicationSettings.getInputSource().getFilePath()).getCanonicalPath()
-        );
-
         try (Stream<String> lines = Files.lines(
                 new File(applicationSettings.getInputSource().getFilePath()).getCanonicalFile().toPath())) {
+            log.debug(
+                    "Scanning input file {}",
+                    new File(applicationSettings.getInputSource().getFilePath()).getCanonicalPath()
+            );
             String content = lines.collect(Collectors.joining("\n"));
             return StringUtils.isBlank(content) ? content : content + CLOSING_NEWLINE;
+        } catch (IOException ioException) {
+            throw new FileReadingException(ioException);
         }
     }
 }

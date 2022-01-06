@@ -1,5 +1,9 @@
 package com.kmarcee.bankocr.business;
 
+import com.kmarcee.bankocr.business.exception.validation.EmptyFileException;
+import com.kmarcee.bankocr.business.exception.validation.InvalidContentException;
+import com.kmarcee.bankocr.business.exception.validation.InvalidFileSyntaxException;
+import com.kmarcee.bankocr.business.exception.validation.InvalidLineLengthException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +13,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.MULTILINE;
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang.StringUtils.isEmpty;
 
 @Service
 @Slf4j
@@ -34,33 +38,34 @@ public class InputFileValidator implements FileValidator {
         for (String line : lines) {
             lineNumber++;
             if (!(ACCOUNT_FILE_LINE_PATTERN.matcher(line).matches() || line.isEmpty())) {
-                throw new IllegalArgumentException(
-                        "Invalid file content. First error was detected in line " +
-                                lineNumber + "/" + lines.size() +
-                                " [" +
-                                (line.length() != LINE_LENGTH ?
-                                        "The length of the line does not match the expectation." :
-                                        "Some characters are not allowed.") +
-                                "]: " +
-                                line
-                );
+                if (line.length() != LINE_LENGTH) {
+                    throw new InvalidLineLengthException(
+                            "Invalid file content. First error was detected in line " +
+                                    lineNumber + "/" + lines.size() +
+                                    " [The length of the line does not match the expectation.]: " +
+                                    line
+                    );
+                } else {
+                    throw new InvalidContentException(
+                            "Invalid file content. First error was detected in line " +
+                                    lineNumber + "/" + lines.size() +
+                                    " [Some characters are not allowed.]: " +
+                                    line
+                    );
+                }
             }
         }
     }
 
     private void checkIfHasValidSyntax(String fileContent) {
         if (!ACCOUNT_FILE_PATTERN.matcher(fileContent).matches()) {
-            throw new IllegalArgumentException(
-                    "Invalid file syntax. Although each line seems to have valid length and content, " +
-                            "the structure of bank account entries may not follow the expected pattern. " +
-                            "Please check for extra or missing lines, delimiting new lines, etc."
-            );
+            throw new InvalidFileSyntaxException();
         }
     }
 
     private void checkIfNotEmpty(String fileContent) {
-        if (isBlank(fileContent)) {
-            throw new IllegalArgumentException("File is empty.");
+        if (isEmpty(fileContent)) {
+            throw new EmptyFileException();
         }
     }
 }

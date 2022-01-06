@@ -1,5 +1,6 @@
 package com.kmarcee.bankocr.business;
 
+import com.kmarcee.bankocr.business.exception.parsing.FileReadingException;
 import com.kmarcee.bankocr.config.ApplicationSettings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,8 +9,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.io.IOException;
-import java.nio.file.NoSuchFileException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,11 +42,11 @@ public class FileScannerTests {
     void read_inputFileNotExists_exceptionThrown() {
         doReturn("nonExistingInputData.txt").when(inputSource).getFile();
 
-        assertThrows(NoSuchFileException.class, () -> fileScanner.read());
+        assertThrows(FileReadingException.class, () -> fileScanner.read());
     }
 
     @Test
-    void read_emptyInputFileExists_fileContentReturned() throws IOException {
+    void read_emptyInputFileExists_fileContentReturned() {
         doReturn("emptyTestData.txt").when(inputSource).getFile();
 
         String fileContent = fileScanner.read();
@@ -56,7 +55,7 @@ public class FileScannerTests {
     }
 
     @Test
-    void read_inputFileWithSomeContentExists_fileContentReturned() throws IOException {
+    void read_inputFileWithSomeContentExists_fileContentReturned() {
         doReturn("someContent.txt").when(inputSource).getFile();
 
         String fileContent = fileScanner.read();

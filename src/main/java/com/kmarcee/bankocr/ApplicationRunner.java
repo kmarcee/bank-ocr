@@ -8,7 +8,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 @Component
@@ -32,12 +31,12 @@ public class ApplicationRunner implements CommandLineRunner {
             //printInitializedComponents();
             executeApplicationLogic();
             log.info("Closing application...");
-        } catch (Exception exception) {
-            log.error(exception.getMessage());
+        } catch (Throwable throwable) {
+            log.error(throwable.getMessage());
         }
     }
 
-    private void executeApplicationLogic() throws IOException {
+    private void executeApplicationLogic() {
         String fileContent = fileScanner.read();
         fileValidator.validate(fileContent);
     }
