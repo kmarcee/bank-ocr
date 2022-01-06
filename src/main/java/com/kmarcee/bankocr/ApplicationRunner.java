@@ -1,7 +1,7 @@
 package com.kmarcee.bankocr;
 
-import com.kmarcee.bankocr.business.FileScanner;
-import com.kmarcee.bankocr.business.FileValidator;
+import com.kmarcee.bankocr.business.service.scanner.FileScanner;
+import com.kmarcee.bankocr.business.service.validator.FileValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

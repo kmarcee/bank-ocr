@@ -1,4 +1,4 @@
-package com.kmarcee.bankocr.business;
+package com.kmarcee.bankocr.business.service.scanner;
 
 import com.kmarcee.bankocr.business.exception.parsing.FileReadingException;
 import com.kmarcee.bankocr.config.ApplicationSettings;

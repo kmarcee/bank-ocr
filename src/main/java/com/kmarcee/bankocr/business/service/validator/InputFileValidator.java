@@ -1,4 +1,4 @@
-package com.kmarcee.bankocr.business;
+package com.kmarcee.bankocr.business.service.validator;
 
 import com.kmarcee.bankocr.business.exception.validation.EmptyFileException;
 import com.kmarcee.bankocr.business.exception.validation.InvalidContentException;
