@@ -51,12 +51,25 @@ public class FileScannerTests {
         cleanUpFiles();
     }
 
-    void cleanUpFiles() {
+    private void cleanUpFiles() {
         File targetFile = new File(inputSource.getFilePath());
         targetFile.delete();
     }
 
-    void createFileWithTextContent(String content) throws IOException {
+    private void createFileWithTextContent(String content) throws IOException {
+        ensureTargetDirectoryExists();
+        writeToFile(content);
+    }
+
+    private void ensureTargetDirectoryExists() throws IOException {
+        File rootDir = new File(inputSource.getRootDir());
+        File nestedDir = new File(rootDir, inputSource.getDir());
+        if (!nestedDir.exists() && !nestedDir.mkdirs()) {
+            throw new IOException("Cannot create directories.");
+        }
+    }
+
+    private void writeToFile(String content) throws IOException {
         FileOutputStream fos = new FileOutputStream(inputSource.getFilePath());
         DataOutputStream outStream = new DataOutputStream(new BufferedOutputStream(fos));
         if (StringUtils.isNotEmpty(content)) {
