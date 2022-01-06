@@ -2,6 +2,7 @@ package com.kmarcee.bankocr.business;
 
 import com.kmarcee.bankocr.config.ApplicationSettings;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -44,7 +45,8 @@ public class InputFileScanner implements FileScanner {
 
         try (Stream<String> lines = Files.lines(
                 new File(applicationSettings.getInputSource().getFilePath()).getCanonicalFile().toPath())) {
-            return lines.collect(Collectors.joining("\n")) + CLOSING_NEWLINE;
+            String content = lines.collect(Collectors.joining("\n"));
+            return StringUtils.isBlank(content) ? content : content + CLOSING_NEWLINE;
         }
     }
 }
