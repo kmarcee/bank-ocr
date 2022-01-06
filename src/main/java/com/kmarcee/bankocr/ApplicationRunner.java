@@ -1,11 +1,14 @@
 package com.kmarcee.bankocr;
 
 import com.kmarcee.bankocr.business.FileScanner;
+import com.kmarcee.bankocr.business.FileValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 @Component
@@ -14,24 +17,29 @@ public class ApplicationRunner implements CommandLineRunner {
 
     private final ApplicationContext ctx;
     private final FileScanner fileScanner;
+    private final FileValidator fileValidator;
 
-    public ApplicationRunner(ApplicationContext ctx, FileScanner fileScanner) {
+    @Autowired
+    public ApplicationRunner(ApplicationContext ctx, FileScanner fileScanner, FileValidator fileValidator) {
         this.ctx = ctx;
         this.fileScanner = fileScanner;
+        this.fileValidator = fileValidator;
     }
 
     @Override
     public void run(String... args) {
         try {
-            printInitializedComponents();
+            //printInitializedComponents();
             executeApplicationLogic();
+            log.info("Closing application...");
         } catch (Exception exception) {
             log.error(exception.getMessage());
         }
     }
 
-    private void executeApplicationLogic() {
-        fileScanner.read();
+    private void executeApplicationLogic() throws IOException {
+        String fileContent = fileScanner.read();
+        fileValidator.validate(fileContent);
     }
 
     private void printInitializedComponents() {

@@ -1,5 +1,7 @@
 package com.kmarcee.bankocr.business;
 
+import java.io.IOException;
+
 public interface FileScanner {
-    void read();
+    String read() throws IOException;
 }

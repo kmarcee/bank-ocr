@@ -1,0 +1,27 @@
+settings:
+  input-source:
+    root-dir: data
+    dir: default
+    file: defaultData.txt
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+settings:
+  input-source:
+    root-dir: data
+    dir: test
+    file: testData.txt
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+settings:
+  input-source:
+    root-dir: data
+    dir: prod
+    file: inputData.txt
