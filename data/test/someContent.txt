@@ -1,8 +1,0 @@
-abcdef
-ghijkl
-mnopqr
-
-apple
-pie
-
-END
