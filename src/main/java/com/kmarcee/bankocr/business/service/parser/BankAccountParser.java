@@ -1,5 +1,7 @@
 package com.kmarcee.bankocr.business.service.parser;
 
+import com.kmarcee.bankocr.business.exception.parsing.LineNumberMismatchException;
+import com.kmarcee.bankocr.business.exception.validation.InvalidLineLengthException;
 import com.kmarcee.bankocr.business.model.BankAccountNumber;
 import com.kmarcee.bankocr.business.model.MatrixFigure;
 import org.springframework.stereotype.Service;
@@ -42,7 +44,7 @@ public class BankAccountParser implements NumberParser {
 
     public static BankAccountNumber extractFromLines(List<String> lines) {
         if (lines.size() != LINES_PER_ENTRY) {
-            throw new IllegalArgumentException("Illegal number of lines provided for bank account number extraction.");
+            throw new LineNumberMismatchException();
         }
 
         return fromMatrixFigures(buildMatrixFigures(lines));
@@ -56,6 +58,9 @@ public class BankAccountParser implements NumberParser {
         }
 
         for (String line : lines) {
+            if (line.length() != LINE_LENGTH) {
+                throw new InvalidLineLengthException("Invalid line length.");
+            }
             byte[] bytes = line.getBytes(UTF_8);
             for (int col = 0; col < LINE_LENGTH; col++) {
                 figures[col / DIGIT_WIDTH].addCharacter(bytes[col]);

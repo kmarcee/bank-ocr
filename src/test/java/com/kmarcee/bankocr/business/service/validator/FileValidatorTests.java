@@ -4,9 +4,7 @@ import com.kmarcee.bankocr.business.exception.validation.EmptyFileException;
 import com.kmarcee.bankocr.business.exception.validation.InvalidContentException;
 import com.kmarcee.bankocr.business.exception.validation.InvalidFileSyntaxException;
 import com.kmarcee.bankocr.business.exception.validation.InvalidLineLengthException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -15,13 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ActiveProfiles(profiles = "test")
 public class FileValidatorTests {
 
-    FileValidator fileValidator;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        fileValidator = new InputFileValidator();
-    }
+    FileValidator fileValidator = new InputFileValidator();
 
     @Test
     void validate_contentIsNull_exceptionThrown() {
