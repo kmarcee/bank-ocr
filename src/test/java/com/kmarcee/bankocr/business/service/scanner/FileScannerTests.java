@@ -1,6 +1,6 @@
 package com.kmarcee.bankocr.business.service.scanner;
 
-import com.kmarcee.bankocr.business.exception.parsing.FileReadingException;
+import com.kmarcee.bankocr.business.exception.scanning.FileReadingException;
 import com.kmarcee.bankocr.config.ApplicationSettings;
 import org.apache.commons.lang.StringUtils;
 import org.junit.jupiter.api.AfterEach;

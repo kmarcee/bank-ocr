@@ -7,11 +7,11 @@ import com.kmarcee.bankocr.business.exception.validation.InvalidLineLengthExcept
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static com.kmarcee.bankocr.business.service.parser.BankAccountParser.LINE_LENGTH;
+import static com.kmarcee.bankocr.business.util.Utils.getContentAsLines;
 import static java.util.regex.Pattern.MULTILINE;
 import static org.apache.commons.lang.StringUtils.isEmpty;
 
@@ -19,7 +19,6 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
 @Slf4j
 public class InputFileValidator implements FileValidator {
 
-    private static final int LINE_LENGTH = 27;
     private static final Pattern ACCOUNT_FILE_PATTERN = Pattern.compile("^((([| _]{27}\\n){3}\\n)+)$", MULTILINE);
     private static final Pattern ACCOUNT_FILE_LINE_PATTERN = Pattern.compile("[| _]{27}");
 
@@ -32,8 +31,7 @@ public class InputFileValidator implements FileValidator {
 
     private void checkByLine(String fileContent) {
         int lineNumber = 0;
-        List<String> lines = new ArrayList<>(Arrays.asList(fileContent.split("\n")));
-        lines.add("");
+        List<String> lines = getContentAsLines(fileContent);
 
         for (String line : lines) {
             lineNumber++;

@@ -13,7 +13,7 @@ settings:
   input-source:
     root-dir: data
     dir: test
-    file: testData.txt
+    file: acceptanceTestData.txt
 
 ---
 spring:

@@ -1,4 +1,4 @@
-package com.kmarcee.bankocr.business.exception.parsing;
+package com.kmarcee.bankocr.business.exception.scanning;
 
 import com.kmarcee.bankocr.business.exception.ApplicationException;
 
