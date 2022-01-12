@@ -85,6 +85,13 @@ public class FileScannerTests {
     }
 
     @Test
+    void read_inputFilePathNotSpecifiedOrEmpty_nullFileContentReturned() throws IOException {
+        doReturn("").when(inputSource).getFilePath();
+
+        assertThrows(FileReadingException.class, () -> fileScanner.read());
+    }
+
+    @Test
     void read_emptyInputFileExists_fileContentReturned() throws IOException {
         createFileWithTextContent(null);
 

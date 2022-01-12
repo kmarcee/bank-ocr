@@ -35,8 +35,7 @@ public class InputFileScanner implements FileScanner {
     @Override
     public String read() {
         if (isBlank(applicationSettings.getInputSource().getFilePath())) {
-            log.warn("Cannot scan unspecified input file.");
-            return null;
+            throw new FileReadingException("Cannot scan unspecified input file.");
         }
 
         try (Stream<String> lines = Files.lines(

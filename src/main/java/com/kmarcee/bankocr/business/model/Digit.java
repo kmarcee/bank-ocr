@@ -45,10 +45,18 @@ public enum Digit {
         this.matrixRepresentation = matrixRepresentation;
     }
 
-    public String getLabel() {
+    /**
+     * Returns the respective arabic number (numeric value) of this digit as text.
+     * @return the respective arabic number (numeric value) of this digit as text
+     */
+    public String getNumericValue() {
         return value == 10 ? "?" : String.valueOf(value);
     }
 
+    /**
+     * Returns the byte array representing this digit.
+     * @return the byte array representing this digit
+     */
     public byte[] getMatrixRepresentation() {
         return matrixRepresentation.getBytes(UTF_8);
     }

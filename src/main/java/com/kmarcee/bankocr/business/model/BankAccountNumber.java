@@ -11,6 +11,11 @@ public class BankAccountNumber {
         digits = new Digit[9];
     }
 
+    /**
+     *
+     * @param figures
+     * @return
+     */
     public static BankAccountNumber fromMatrixFigures(MatrixFigure[] figures) {
         BankAccountNumber bankAccountNumber = new BankAccountNumber();
         for (int i = 0; i < DIGITS_IN_ACCOUNT_NUMBER; i++) {
@@ -19,10 +24,14 @@ public class BankAccountNumber {
         return bankAccountNumber;
     }
 
+    /**
+     *
+     * @return
+     */
     public String print() {
         StringBuilder printedBankAccountNumberBuilder = new StringBuilder();
         for (Digit digit: digits) {
-            printedBankAccountNumberBuilder.append(digit.getLabel());
+            printedBankAccountNumberBuilder.append(digit.getNumericValue());
         }
         return printedBankAccountNumberBuilder.toString();
     }
