@@ -160,7 +160,21 @@
                     <targetTests>
                         <param>com.kmarcee.bankocr.business.service.*</param>
                     </targetTests>
+                    <mutators>ALL</mutators>
+                    <coverageThreshold>80</coverageThreshold>
+                    <mutationThreshold>85</mutationThreshold>
+                    <testStrengthThreshold>90</testStrengthThreshold>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>run-mutation-tests</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>mutationCoverage</goal>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
