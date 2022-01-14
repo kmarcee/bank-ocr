@@ -154,12 +154,17 @@
                     </dependency>
                 </dependencies>
                 <configuration>
+                    <outputFormats>
+                        <outputFormat>HTML</outputFormat>
+                        <outputFormat>XML</outputFormat>
+                    </outputFormats>
                     <targetClasses>
                         <param>com.kmarcee.bankocr.business.service.*</param>
                     </targetClasses>
                     <targetTests>
                         <param>com.kmarcee.bankocr.business.service.*</param>
                     </targetTests>
+                    <exportLineCoverage>true</exportLineCoverage>
                     <mutators>ALL</mutators>
                     <coverageThreshold>80</coverageThreshold>
                     <mutationThreshold>85</mutationThreshold>
