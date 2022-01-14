@@ -32,6 +32,6 @@ jobs:
       if: always()
       with:
         files: |
-          surefire-reports/TEST-*.xml
-          pit-reports/**/mutations.xml
+          **/surefire-reports/TEST-*.xml
+          **/pit-reports/**/mutations.xml
         report_individual_runs: "true"
