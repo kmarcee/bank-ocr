@@ -1,7 +1,8 @@
 package com.kmarcee.bankocr.business.service.parser;
 
 import com.kmarcee.bankocr.business.exception.parsing.LineNumberMismatchException;
-import com.kmarcee.bankocr.business.exception.validation.InvalidContentException;
+import com.kmarcee.bankocr.business.exception.validation.IllegalCharacterException;
+import com.kmarcee.bankocr.business.exception.validation.IllegalMultiByteCharacterException;
 import com.kmarcee.bankocr.business.exception.validation.InvalidLineLengthException;
 import com.kmarcee.bankocr.business.model.BankAccountNumber;
 import org.junit.jupiter.api.Test;
@@ -31,8 +32,33 @@ public class NumberParserTests {
     }
 
     @Test
-    void parse_contentHasInsufficientLinesForABankAccountEntry_exceptionThrown() {
-        assertThrows(LineNumberMismatchException.class, () -> numberParser.parse("|_\n"));
+    void parse_contentHasInsufficientLinesForABankAccountEntry_emptyResult() {
+        List<BankAccountNumber> bankAccountNumbers = numberParser.parse("|\n");
+
+        assertThat(bankAccountNumbers, empty());
+    }
+
+    @Test
+    void parse_contentHasOneValidEntryAndASecondEntryWithEmptyLineWithinEntry_onlyTheFirstIsParsed() {
+        List<BankAccountNumber> bankAccountNumbers = numberParser.parse(
+                "    _  _     _  _  _  _  _ \n  | _| _||_||_ |_   ||_||_|\n  ||_  _|  | _||_|  ||_| _|\n\n" +
+                        "    _  _     _  _  _  _  _ \n\n\n  ||_  _|  | _||_|  ||_| _|\n\n"
+        );
+
+        assertThat(bankAccountNumbers, hasSize(1));
+        assertThat(bankAccountNumbers.get(0).print(), is("123456789"));
+    }
+
+    @Test
+    void parse_contentHasNotBlankDelimiterLine_exceptionThrown() {
+        assertThrows(
+                LineNumberMismatchException.class,
+                () -> numberParser.parse(
+                "    _  _     _  _  _  _  _ \n  | _| _||_||_ |_   ||_||_|\n  ||_  _|  | _||_|  ||_| _|\n" +
+                        "something" +
+                        "    _  _     _  _  _  _  _ \n  | _| _||_||_ |_   ||_||_|\n  ||_  _|  | _||_|  ||_| _|\n\n"
+                )
+        );
     }
 
     @Test
@@ -41,9 +67,19 @@ public class NumberParserTests {
     }
 
     @Test
+    void parse_contentHasIllegalCharacter_exceptionThrown() {
+        assertThrows(
+                IllegalCharacterException.class,
+                () -> numberParser.parse(
+                        "A   _  _     _  _  _  _  _ \n  | _| _||_||_ |_   ||_||_|\n  ||_  _|  | _||_|  ||_| _|\n\n"
+                )
+        );
+    }
+
+    @Test
     void parse_contentHasIllegalMultiByteCharacter_exceptionThrown() {
         assertThrows(
-                InvalidContentException.class,
+                IllegalMultiByteCharacterException.class,
                 () -> numberParser.parse(
                         "Ł   _  _     _  _  _  _  _ \n  | _| _||_||_ |_   ||_||_|\n  ||_  _|  | _||_|  ||_| _|\n\n"
                 )
@@ -68,5 +104,17 @@ public class NumberParserTests {
 
         assertThat(bankAccountNumbers, hasSize(1));
         assertThat(bankAccountNumbers.get(0).print(), is("123456789"));
+    }
+
+    @Test
+    void parse_hasTwoValidEntries_figuresAreExtracted() {
+        List<BankAccountNumber> bankAccountNumbers = numberParser.parse(
+                "    _  _     _  _  _  _  _ \n  | _| _||_||_ |_   ||_||_|\n  ||_  _|  | _||_|  ||_| _|\n\n" +
+                        " _  _  _     _  _  _  _  _ \n| | _| _||_||_ |_   ||_||_|\n|_||_  _|  | _||_|  ||_| _|\n\n"
+        );
+
+        assertThat(bankAccountNumbers, hasSize(2));
+        assertThat(bankAccountNumbers.get(0).print(), is("123456789"));
+        assertThat(bankAccountNumbers.get(1).print(), is("023456789"));
     }
 }

@@ -1,9 +1,9 @@
 package com.kmarcee.bankocr.business.service.scanner;
 
+import com.kmarcee.bankocr.business.exception.scanning.DeficientConfigurationException;
 import com.kmarcee.bankocr.business.exception.scanning.FileReadingException;
 import com.kmarcee.bankocr.config.ApplicationSettings;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -35,7 +35,7 @@ public class InputFileScanner implements FileScanner {
     @Override
     public String read() {
         if (isBlank(applicationSettings.getInputSource().getFilePath())) {
-            throw new FileReadingException("Cannot scan unspecified input file.");
+            throw new DeficientConfigurationException("Cannot scan unspecified input file.");
         }
 
         try (Stream<String> lines = Files.lines(
@@ -45,7 +45,7 @@ public class InputFileScanner implements FileScanner {
                     new File(applicationSettings.getInputSource().getFilePath()).getCanonicalPath()
             );
             String content = lines.collect(Collectors.joining("\n"));
-            return StringUtils.isBlank(content) ? content : content + CLOSING_NEWLINE;
+            return isBlank(content) ? content : content + CLOSING_NEWLINE;
         } catch (IOException ioException) {
             throw new FileReadingException(ioException);
         }

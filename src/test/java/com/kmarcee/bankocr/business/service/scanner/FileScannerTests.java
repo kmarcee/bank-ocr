@@ -1,5 +1,6 @@
 package com.kmarcee.bankocr.business.service.scanner;
 
+import com.kmarcee.bankocr.business.exception.scanning.DeficientConfigurationException;
 import com.kmarcee.bankocr.business.exception.scanning.FileReadingException;
 import com.kmarcee.bankocr.config.ApplicationSettings;
 import org.apache.commons.lang.StringUtils;
@@ -88,7 +89,7 @@ public class FileScannerTests {
     void read_inputFilePathNotSpecifiedOrEmpty_nullFileContentReturned() throws IOException {
         doReturn("").when(inputSource).getFilePath();
 
-        assertThrows(FileReadingException.class, () -> fileScanner.read());
+        assertThrows(DeficientConfigurationException.class, () -> fileScanner.read());
     }
 
     @Test

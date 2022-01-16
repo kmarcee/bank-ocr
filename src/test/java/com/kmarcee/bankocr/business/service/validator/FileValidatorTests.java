@@ -7,8 +7,9 @@ import com.kmarcee.bankocr.business.exception.validation.InvalidLineLengthExcept
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles(profiles = "test")
 public class FileValidatorTests {
@@ -27,7 +28,11 @@ public class FileValidatorTests {
 
     @Test
     void validate_contentHasLineWithIncorrectLength_exceptionThrown() {
-        assertThrows(InvalidLineLengthException.class, () -> fileValidator.validate(" "));
+        InvalidLineLengthException thrown = assertThrows(
+                InvalidLineLengthException.class,
+                () -> fileValidator.validate("___")
+        );
+        assertThat(thrown.getMessage(), containsString("First error was detected in line 1/1"));
     }
 
     @Test

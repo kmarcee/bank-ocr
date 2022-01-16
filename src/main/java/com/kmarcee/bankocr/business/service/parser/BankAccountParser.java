@@ -1,7 +1,7 @@
 package com.kmarcee.bankocr.business.service.parser;
 
 import com.kmarcee.bankocr.business.exception.parsing.LineNumberMismatchException;
-import com.kmarcee.bankocr.business.exception.validation.InvalidContentException;
+import com.kmarcee.bankocr.business.exception.validation.IllegalMultiByteCharacterException;
 import com.kmarcee.bankocr.business.exception.validation.InvalidLineLengthException;
 import com.kmarcee.bankocr.business.model.BankAccountNumber;
 import com.kmarcee.bankocr.business.model.MatrixFigure;
@@ -23,6 +23,7 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
 public class BankAccountParser implements NumberParser {
 
     public static final int LINES_PER_ENTRY = DIGIT_HEIGHT;
+    public static final int LINES_PER_ENTRY_PLUS_BLANK_LINE = LINES_PER_ENTRY + 1;
     public static final int LINE_LENGTH = DIGITS_IN_ACCOUNT_NUMBER * DIGIT_WIDTH;
 
     @Override
@@ -33,12 +34,14 @@ public class BankAccountParser implements NumberParser {
     private List<BankAccountNumber> parseBankAccountNumbers(List<String> lines) {
         List<BankAccountNumber> bankAccountNumbers = new LinkedList<>();
         List<String> linesForEntry = new LinkedList<>();
+        int counter = 0;
         for (String actualLine : lines) {
-            if (!isEmpty(actualLine)) {
-                linesForEntry.add(actualLine);
-            } else {
+            counter++;
+            if (isEmpty(actualLine) && counter % LINES_PER_ENTRY_PLUS_BLANK_LINE == 0) {
                 bankAccountNumbers.add(extractFromLines(linesForEntry));
                 linesForEntry.clear();
+            } else {
+                linesForEntry.add(actualLine);
             }
         }
         return bankAccountNumbers;
@@ -86,9 +89,7 @@ public class BankAccountParser implements NumberParser {
 
     private static void checkForExistenceOfMultiByteCharacters(byte[] bytes) {
         if (bytes.length != LINE_LENGTH) {
-            throw new InvalidContentException(
-                    "The line contains illegal multi-byte characters: " + Arrays.toString(bytes)
-            );
+            throw new IllegalMultiByteCharacterException(Arrays.toString(bytes));
         }
     }
 

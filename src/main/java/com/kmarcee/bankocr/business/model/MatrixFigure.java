@@ -2,7 +2,7 @@ package com.kmarcee.bankocr.business.model;
 
 import com.kmarcee.bankocr.business.exception.parsing.IllegalMatrixPositionAddressedException;
 import com.kmarcee.bankocr.business.exception.parsing.IncompleteFigureException;
-import com.kmarcee.bankocr.business.exception.validation.InvalidContentException;
+import com.kmarcee.bankocr.business.exception.validation.IllegalCharacterException;
 
 import java.util.Arrays;
 
@@ -53,7 +53,7 @@ public class MatrixFigure {
 
     private void checkIfCharacterIsAllowed(byte parsedChar) {
         if (!(parsedChar == SPACE_CHAR || parsedChar == PIPE_CHAR || parsedChar == UNDERSCORE_CHAR)) {
-            throw new InvalidContentException("Illegal character found: " + parsedChar);
+            throw new IllegalCharacterException(parsedChar);
         }
     }
 

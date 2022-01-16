@@ -167,8 +167,8 @@
                     <exportLineCoverage>true</exportLineCoverage>
                     <mutators>ALL</mutators>
                     <coverageThreshold>80</coverageThreshold>
-                    <mutationThreshold>80</mutationThreshold>
-                    <testStrengthThreshold>80</testStrengthThreshold>
+                    <mutationThreshold>85</mutationThreshold>
+                    <testStrengthThreshold>85</testStrengthThreshold>
                 </configuration>
                 <executions>
                     <execution>
@@ -176,6 +176,12 @@
                         <phase>test</phase>
                         <goals>
                             <goal>mutationCoverage</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>create-mutation-test-report</id>
+                        <phase>site</phase>
+                        <goals>
                             <goal>report</goal>
                         </goals>
                     </execution>

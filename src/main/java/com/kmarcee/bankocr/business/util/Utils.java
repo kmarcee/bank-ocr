@@ -17,8 +17,7 @@ public class Utils {
         if (StringUtils.isEmpty(fileContent)) {
             lines = emptyList();
         } else {
-            lines = new LinkedList<>(Arrays.asList(fileContent.split("\n")));
-            lines.add("");
+            lines = new LinkedList<>(Arrays.asList(fileContent.split("\\R", -1)));
         }
         return lines;
     }
